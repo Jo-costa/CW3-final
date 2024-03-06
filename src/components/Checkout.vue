@@ -17,6 +17,8 @@
                             <input type="text" v-model="order.firstName" id="first-name" name="first_name"
                                 placeholder="First name">
                         </div>
+
+
                         <div class="address-container">
                             <label for="phone">Phone Number</label>
                             <input type="tel" v-model="order.phone" class="phone" name="phone" id="phone"
@@ -51,7 +53,7 @@
                         </div>
                         <div class="item" v-for="product in cart">
                             <div class="product-info">
-                                <img v-bind:src="getProdImg(product)" alt="" srcset="" width="40px" height="40px">
+                                <img v-bind:src="getProdImg(product)" width="40px" height="40px">
                                 <p class="item-name">{{ product.subject }}</p>
                             </div>
                             <form action="" name="item-id">

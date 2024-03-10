@@ -64,12 +64,12 @@
 
                             </form>
                             <div class="qty-management">
-                                <button class="item-decrease" @click="decrease(product)"><font-awesome-icon
+                                <button class="item-decrease" @click="decreaseQty(product)"><font-awesome-icon
                                         icon="fa-solid fa-minus" /></button>
                                 <p class="item-qty">Qty <span>{{ product.qty }}</span></p>
-                                <button class="item-add" @click="increase(product)"><font-awesome-icon
+                                <button class="item-add" @click="increaseQty(product)"><font-awesome-icon
                                         icon="fa-solid fa-plus" /></button>
-                                <button class="item-remove" @click="removeAlItems(product)"><font-awesome-icon
+                                <button class="item-remove" @click="removeAllMatching(product)"><font-awesome-icon
                                         icon="fa-solid fa-trash" /></button>
                             </div>
                         </div>
@@ -119,6 +119,15 @@ export default {
 
     methods: {
 
+
+        increaseQty(product) {
+            this.$emit("inc", product)
+        },
+
+        decreaseQty(product) {
+            this.$emit("dec", product)
+        },
+
         showProducts() {
             this.$emit("show-products");
             console.log("Clicked");
@@ -129,9 +138,17 @@ export default {
             this.$emit("place-order")
         },
 
+
+        removeAllMatching(product) {
+
+            this.$emit("remove-all-matching", product)
+        },
+
         removeAll(cart) {
             this.$emit("remove-all-from-cart", cart)
-        }
+        },
+
+
     },
 
     computed: {

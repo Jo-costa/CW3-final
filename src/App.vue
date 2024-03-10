@@ -32,13 +32,13 @@
     </div>
 
     <main>
-      <component :is="currentView" :order="order" @show-products="showCheckOut" :remove-items="removeAlItems"
-        :remove-all-from-cart="removeAllItemsFromCart" :basketForm="basketForm" @place-order="placeOrder"
-        :updateBasketInfo="updateBasketInfo" :currentView="currentView" :removeAlItems="removeAlItems"
-        :decrease="decrease" :increase="increase" :getProdID="getProdID" :getProdImg="getProdImg" :cart="cart"
-        :addToCart="addToCart" :cartCount="cartCount" :canAddToCart="canAddToCart" :cartItemCount="cartItemCount"
-        :products="products" :searchResults="searchResults" @add-item-to-cart="addToCart"
-        @can-add-item-to-cart="canAddToCart" :search="search">
+      <component :is="currentView" :order="order" @show-products="showCheckOut" @remove-all-matching="removeAlItems"
+        @remove-all-from-cart="removeAllItemsFromCart" :basketForm="basketForm" @place-order="placeOrder"
+        :updateBasketInfo="updateBasketInfo" :currentView="currentView" :removeAlItems="removeAlItems" @dec="decrease"
+        @inc="increase" :getProdID="getProdID" :getProdImg="getProdImg" :cart="cart" :addToCart="addToCart"
+        :cartCount="cartCount" :canAddToCart="canAddToCart" :cartItemCount="cartItemCount" :products="products"
+        :searchResults="searchResults" @add-item-to-cart="addToCart" @can-add-item-to-cart="canAddToCart"
+        :search="search">
 
 
       </component>
@@ -287,11 +287,12 @@ export default {
 
     removeAlItems: function (product) {
 
+
       let getItem = this.products.find((element) => element.id == product.id);
 
       this.cart = this.cart.filter(item => !(item.id === product.id))
 
-      getItem.spaces = 5;
+      getItem.spaces = product.availableInventory;
 
     },
 
@@ -300,13 +301,20 @@ export default {
 
       const deleteAll = cart.map(item => item.id);
 
-      cart.splice(0, cart.length)
+      this.products.forEach(product => {
+        if (deleteAll.includes(product.id)) {
 
-      this.products.forEach(item => {
-        if (deleteAll.includes(item.id))
-          item.spaces = 5;
+          const removedItem = cart.find(item => item.id === product.id);
+
+          if (removedItem) {
+            product.spaces = removedItem.availableInventory
+          }
+
+        }
+
       })
 
+      cart.splice(0, cart.length)
     },
 
     addToCart: function (product) {
